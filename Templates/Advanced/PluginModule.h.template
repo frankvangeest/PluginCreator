@@ -20,7 +20,7 @@ public:
 	
 private:
 
-	TSharedRef<class SDockTab> OnSpawnPluginTab(const class FSpawnTabArgs& SpawnTabArgs);
+	TSharedRef<class SDockTab> OnSpawnPluginTab(const FSpawnTabArgs& SpawnTabArgs);
 
 	void AddToolbarExtension(class FToolBarBuilder &);
 	void AddMenuExtension(class FMenuBuilder &);

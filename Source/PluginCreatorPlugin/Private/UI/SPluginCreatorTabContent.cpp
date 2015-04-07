@@ -70,7 +70,7 @@ void SPluginCreatorTabContent::Construct(const FArguments& InArgs)
 							[
 								SNew(SCheckBox)
 								.OnCheckStateChanged(this, &SPluginCreatorTabContent::OnUsePrivatePublicSplitChanged)
-								.IsChecked(ESlateCheckBoxState::Checked)
+								.IsChecked(ECheckBoxState::Checked)
 								.Content()
 								[
 									SNew(STextBlock)
@@ -346,15 +346,18 @@ void SPluginCreatorTabContent::OnTemplatesTabSwitched(const FText& InNewTab)
 
 void SPluginCreatorTabContent::InitDetailsView()
 {
-
 	// Create a property view
 	FPropertyEditorModule& EditModule = FModuleManager::Get().GetModuleChecked<FPropertyEditorModule>("PropertyEditor");
 
-#if ENGINE_MINOR_VERSION < 7
-	FDetailsViewArgs DetailsViewArgs( /*bUpdateFromSelection=*/ false, /*bLockable=*/ false, /*bAllowSearch=*/ false, /*bObjectsUseNameArea=*/ true, /*bHideSelectionTip=*/ true, /*InNotifyHook=*/ NULL, /*InSearchInitialKeyFocus=*/ false, /*InViewIdentifier=*/ NAME_None);
-#else
-	FDetailsViewArgs DetailsViewArgs( /*bUpdateFromSelection=*/ false, /*bLockable=*/ false, /*bAllowSearch=*/ false, /*const ENameAreaSettings InNameAreaSettings =*/ FDetailsViewArgs::ENameAreaSettings::ActorsUseNameArea, /*bHideSelectionTip=*/ true, /*InNotifyHook=*/ NULL, /*InSearchInitialKeyFocus=*/ false, /*InViewIdentifier=*/ NAME_None);
-#endif
+	FDetailsViewArgs DetailsViewArgs( 
+		/*bUpdateFromSelection=*/ false, 
+		/*bLockable=*/ false, 
+		/*bAllowSearch=*/ false, 
+		/*bObjectsUseNameArea=*/ FDetailsViewArgs::ENameAreaSettings::ObjectsUseNameArea,
+		/*bHideSelectionTip=*/ true, 
+		/*InNotifyHook=*/ NULL, 
+		/*InSearchInitialKeyFocus=*/ false, 
+		/*InViewIdentifier=*/ NAME_None);
 
 	PropertyView = EditModule.CreateDetailView(DetailsViewArgs);
 
@@ -363,19 +366,10 @@ void SPluginCreatorTabContent::InitDetailsView()
 	PropertyView->SetObject(DescriptorObject, true);
 }
 
-#if ENGINE_MINOR_VERSION < 7
-void SPluginCreatorTabContent::OnUsePrivatePublicSplitChanged(ESlateCheckBoxState::Type InState)
-{
-	bUsePublicPrivateSplit = InState == ESlateCheckBoxState::Checked;
-}
-#else
 void SPluginCreatorTabContent::OnUsePrivatePublicSplitChanged(ECheckBoxState InState)
 {
 	bUsePublicPrivateSplit = InState == ECheckBoxState::Checked;
 }
-#endif
-
-
 
 void SPluginCreatorTabContent::OnPluginNameTextChanged(const FText& InText)
 {
@@ -559,7 +553,6 @@ FReply SPluginCreatorTabContent::OnCreatePluginClicked()
 			if (!MakeDirectory(PublicSourceFolder))
 			{
 				return FReply::Unhandled();
-
 			}
 		}
 
@@ -575,8 +568,6 @@ FReply SPluginCreatorTabContent::OnCreatePluginClicked()
 		{
 			UE_LOG(PluginCreatorPluginLog, Log, TEXT("Failed to create plugin build file. %s"), *(LocalFailReason.ToString()));
 			DeletePluginDirectory(*PluginFolder);
-			FMessageDialog::Open(EAppMsgType::Ok, LocalFailReason);
-
 			return FReply::Unhandled();
 		}
 		else
@@ -588,8 +579,6 @@ FReply SPluginCreatorTabContent::OnCreatePluginClicked()
 		{
 			UE_LOG(PluginCreatorPluginLog, Log, TEXT("Failed to create plugin header file. %s"), *(LocalFailReason.ToString()));
 			DeletePluginDirectory(*PluginFolder);
-			FMessageDialog::Open(EAppMsgType::Ok, LocalFailReason);
-
 			return FReply::Unhandled();
 		}
 
@@ -597,8 +586,6 @@ FReply SPluginCreatorTabContent::OnCreatePluginClicked()
 		{
 			UE_LOG(PluginCreatorPluginLog, Log, TEXT("Failed to create plugin PCH file. %s"), *(LocalFailReason.ToString()));
 			DeletePluginDirectory(*PluginFolder);
-			FMessageDialog::Open(EAppMsgType::Ok, LocalFailReason);
-
 			return FReply::Unhandled();
 		}
 
@@ -606,8 +593,6 @@ FReply SPluginCreatorTabContent::OnCreatePluginClicked()
 		{
 			UE_LOG(PluginCreatorPluginLog, Log, TEXT("Failed to create plugin cpp file. %s"), *(LocalFailReason.ToString()));
 			DeletePluginDirectory(*PluginFolder);
-			FMessageDialog::Open(EAppMsgType::Ok, LocalFailReason);
-
 			return FReply::Unhandled();
 		}
 
@@ -617,8 +602,6 @@ FReply SPluginCreatorTabContent::OnCreatePluginClicked()
 			{
 				UE_LOG(PluginCreatorPluginLog, Log, TEXT("Failed to create plugin styles files. %s"), *(LocalFailReason.ToString()));
 				DeletePluginDirectory(*PluginFolder);
-				FMessageDialog::Open(EAppMsgType::Ok, LocalFailReason);
-
 				return FReply::Unhandled();
 			}
 
@@ -626,7 +609,6 @@ FReply SPluginCreatorTabContent::OnCreatePluginClicked()
 			{
 				UE_LOG(PluginCreatorPluginLog, Log, TEXT("Failed to create plugin commands file. %s"), *(LocalFailReason.ToString()));
 				DeletePluginDirectory(*PluginFolder);
-				FMessageDialog::Open(EAppMsgType::Ok, LocalFailReason);
 				return FReply::Unhandled();
 			}
 		}

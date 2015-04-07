@@ -6,10 +6,10 @@
 	"VersionName" : "1.0",
 	"CreatedBy" : "Karol Szyszka",
 	"CreatedByURL" : "http://www.michalorzelek.com/blog/",
-	"EngineVersion" : "4.6.1",
+	"EngineVersion" : "4.7.0",
 	"Description" : "This plugin will help you to quickly setup and create all files required to make a plugin. You can choose one of three build templates depending on what kind of plugin you're going to create. For more UE4 related stuff visit our blog by clicking the link below.",
 	"Category" : "Other",
-	"EnabledByDefault" : false,
+	"EnabledByDefault" : true,
 	
 	"Modules" :
 	[
